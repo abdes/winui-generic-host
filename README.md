@@ -1,4 +1,4 @@
-﻿# Generic Host for WinUI applications
+# Generic Host for WinUI applications
 
 The [.Net Hosting
 extensions](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host)
@@ -32,3 +32,72 @@ the WinUI subsystem just another service for which we manage the lifecycle.
 
 See https://github.com/abdes/winui-override-main for the basics of how to
 override the default entry point.
+
+## A hosted service for WinUI
+
+A typical WinUI application runs in a UI thread, assumed to be the main thread,
+and for which the dispatched is initialized in the `Main` entry point.
+
+What we want is to have that thread be a background service, hosted by the
+generic host, along with the other application services. This will give us the
+advnatage of managing the UI just as another service, and of course getting all
+the goodies of the Generic Host listed above.
+
+The implementation, extensively documented in the source code, adds a
+[UserInterfaceHostedService](App/Hosting/Desktop/WinUI/UserInterfaceHostedService.cs)
+which runs the ['UI Thread'](App/Hosting/Desktop/WinUI/UserInterfaceThread.cs)
+as a background service. We can decide, based on the options in the
+[HostingContext](App/Hosting/Desktop/WinUI/HostingContext.cs] if we want the
+lifetime of that 'UI Thread' to be linked to the application lifetime or not. In
+other words, we can decide of termination of the 'UI Thread' results in
+termination of the application or not, and vice versa.
+
+## An extension method for the builder
+
+To simplify the setup of the User Interface hosted service, an [extension
+method](App/Hosting/Desktop/WinUI/HostingExtensions.cs) to the host builder is
+provided.
+
+This greatly simplifies the host building as it is now just a matter of calling
+that extension method.
+
+```csharp
+    private static void Main(string[] args)
+    {
+        // Use a default application host builder, which comes with logging,
+        // configuration providers for environment variables, command line,
+        // appsettings.json and secrets.
+        var builder = Host.CreateApplicationBuilder(args);
+
+        // You can further customize and enhance the builder with additional
+        // configuration sources, logging providers, etc.
+
+        // Setup and provision the hosting context for the User Interface
+        // service.
+        ((IHostApplicationBuilder)builder).Properties.Add(
+            key: HostingExtensions.HostingContextKey,
+            value: new HostingContext() { IsLifetimeLinked = true });
+
+        // Add the WinUI User Interface hosted service as early as possible to
+        // allow the UI to start showing up while you continue setting up other
+        // services not required for the UI.
+        var host = builder.ConfigureWinUI<App, MainWindow>().Build();
+
+        // Finally start the host. This will block until the application
+        // lifetime is terminated through CTRL+C, closing the UI windows or
+        // programmatically.
+        host.Run();
+    }
+```
+
+## Why the UI hosted service does not create the MainWindow?
+
+Simply because not all applications are single window applications and it is not
+obvious in a multi-window application which window will terminate the UI when
+closed. Therefore, it is much more preferrable to continue having the
+`Application` responsible for managing its `Window`s.
+
+## Can this be adapted to WPF, etc. ?
+
+Yes. Simply implemnt the classes inside WinUI namespace for any other UI
+framework.
