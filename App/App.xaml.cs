@@ -1,38 +1,50 @@
-﻿// Distributed under the MIT License. See accompanying file LICENSE or copy
+// Distributed under the MIT License. See accompanying file LICENSE or copy
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
+namespace App;
+
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
-namespace App
+/// <summary>
+/// Provides application-specific behavior to supplement the default Application class.
+/// </summary>
+public partial class App : Application
 {
+    private readonly IServiceProvider serviceProvider;
+    private Window? window;
+
     /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
+    /// Initializes a new instance of the <see cref="App"/> class.
     /// </summary>
-    public partial class App : Application
+    /// In this project architecture, the single instance of the application is
+    /// created by the User Interface hosted service as part of the application
+    /// host initialization. Its lifecycle is managed together with the rest of
+    /// the services.
+    /// <param name="serviceProvider">The Dependency Injector's service
+    /// provider.</param>
+    public App(IServiceProvider serviceProvider)
     {
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
-        public App()
-        {
-            this.InitializeComponent();
-        }
+        this.serviceProvider = serviceProvider;
+        this.InitializeComponent();
+    }
 
-        /// <summary>
-        /// Invoked when the application is launched.
-        /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
-        {
-            m_window = new MainWindow();
-            m_window.Activate();
-        }
+    /// <summary>
+    /// Invoked when the application is launched.
+    /// </summary>
+    /// <param name="args">Details about the launch request and process.</param>
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        /*
+         * At a minimum we should create the application main window here.
+         * This is not different from any regular WinUI application and has no
+         * specific requirements due to the hosting.
+         */
 
-        private Window m_window;
+        this.window = (Window)ActivatorUtilities.CreateInstance(
+            this.serviceProvider,
+            typeof(MainWindow));
+        this.window.Activate();
     }
 }

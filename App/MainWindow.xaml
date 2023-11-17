@@ -4,14 +4,43 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Orientation="Horizontal">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Orientation="Vertical">
+        <Expander>
+            <Expander.Header>
+                <TextBlock Text ="CommandLine Arguments"/>
+            </Expander.Header>
+            <Expander.Content>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Width="200">Boolean Flag:</TextBlock>
+                        <TextBlock Text="{x:Bind booleanFlag}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Width="200">Integer Value:</TextBlock>
+                        <TextBlock Text="{x:Bind intValue}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Width="200">String Value:</TextBlock>
+                        <TextBlock Text="{x:Bind stringValue}" />
+                    </StackPanel>
+                </StackPanel>
+            </Expander.Content>
+        </Expander>
+        <Expander>
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text ="Custom Configuration Section: "/>
+                    <TextBlock Text ="{x:Bind settingsSectionName}"/>
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <TextBlock Text="{x:Bind settings.Greeting}" />
+            </Expander.Content>
+        </Expander>
+        <Button x:Name="LogSomethingButton" Click="LogSomething">Click me to emit a log (Warning level)!</Button>
+        <Button x:Name="ExitButton" Click="Exit">Click me to Exit the Application!</Button>
     </StackPanel>
 </Window>
