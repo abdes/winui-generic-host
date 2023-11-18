@@ -1,0 +1,5 @@
+# These files are text and should be normalized (convert crlf => lf)
+* text=auto
+
+# These files are checked out using CRLF locally
+*.bat eol=crlf
