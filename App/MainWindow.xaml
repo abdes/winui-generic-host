@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Window
-    x:Class="App.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+<Window x:Class="App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d">
 
-    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Orientation="Vertical">
+    <StackPanel HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
         <Expander>
             <Expander.Header>
-                <TextBlock Text ="CommandLine Arguments"/>
+                <TextBlock Text="CommandLine Arguments" />
             </Expander.Header>
             <Expander.Content>
                 <StackPanel Orientation="Vertical">
@@ -32,15 +33,21 @@
         <Expander>
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text ="Custom Configuration Section: "/>
-                    <TextBlock Text ="{x:Bind settingsSectionName}"/>
+                    <TextBlock Text="Custom Configuration Section: " />
+                    <TextBlock Text="{x:Bind settingsSectionName}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
                 <TextBlock Text="{x:Bind settings.Greeting}" />
             </Expander.Content>
         </Expander>
-        <Button x:Name="LogSomethingButton" Click="LogSomething">Click me to emit a log (Warning level)!</Button>
-        <Button x:Name="ExitButton" Click="Exit">Click me to Exit the Application!</Button>
+        <Button x:Name="LogSomethingButton"
+                Click="LogSomething">
+            Click me to emit a log (Warning level)!
+        </Button>
+        <Button x:Name="ExitButton"
+                Click="Exit">
+            Click me to Exit the Application!
+        </Button>
     </StackPanel>
 </Window>
