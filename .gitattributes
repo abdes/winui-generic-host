@@ -3,3 +3,4 @@
 
 # These files are checked out using CRLF locally
 *.bat eol=crlf
+*.cmd eol=crlf
