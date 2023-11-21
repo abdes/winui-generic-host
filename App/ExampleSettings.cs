@@ -2,7 +2,7 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace App;
+namespace Demo;
 
 internal sealed class ExampleSettings
 {

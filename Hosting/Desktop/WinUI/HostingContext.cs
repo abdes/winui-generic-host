@@ -2,8 +2,9 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace App.Hosting.Desktop.WinUI;
+namespace HappyCoding.Hosting.Desktop.WinUI;
 
+using HappyCoding.Hosting.Desktop;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 

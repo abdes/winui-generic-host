@@ -2,7 +2,7 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace App.Hosting.Desktop;
+namespace HappyCoding.Hosting.Desktop;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

@@ -2,7 +2,7 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace App.Hosting.Desktop;
+namespace HappyCoding.Hosting.Desktop;
 
 /// <summary>
 /// Represents the minimal information used to manage the hosting of the User

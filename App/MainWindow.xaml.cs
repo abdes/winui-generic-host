@@ -2,7 +2,7 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace App;
+namespace Demo;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;

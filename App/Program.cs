@@ -6,11 +6,11 @@
 #error "This project only works with custom Main entry point. Must set DISABLE_XAML_GENERATED_MAIN to True."
 #endif
 
-namespace App;
+namespace Demo;
 
 using System.Runtime.InteropServices;
-using global::App.Hosting.Desktop;
-using global::App.Hosting.Desktop.WinUI;
+using HappyCoding.Hosting.Desktop;
+using HappyCoding.Hosting.Desktop.WinUI;
 using Microsoft.Extensions.Hosting;
 
 /// <summary>

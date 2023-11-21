@@ -2,7 +2,7 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace App.Hosting.Desktop.WinUI;
+namespace HappyCoding.Hosting.Desktop.WinUI;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
