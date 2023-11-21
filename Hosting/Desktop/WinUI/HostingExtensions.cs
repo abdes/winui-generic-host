@@ -52,9 +52,9 @@ public static class HostingExtensions
         {
             context = new HostingContext();
             ((IHostApplicationBuilder)hostBuilder).Properties[HostingContextKey] = context;
+            context.IsLifetimeLinked = true;
         }
 
-        context.IsLifetimeLinked = true;
         _ = hostBuilder.Services.AddSingleton(context);
 
         _ = hostBuilder.Services
