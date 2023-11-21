@@ -56,6 +56,7 @@ public static class HostingExtensions
         }
 
         _ = hostBuilder.Services.AddSingleton(context);
+        _ = hostBuilder.Services.AddSingleton<IHostingContext>(services => services.GetRequiredService<HostingContext>());
 
         _ = hostBuilder.Services
             .AddSingleton<UserInterfaceThread>()
