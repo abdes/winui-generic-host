@@ -33,14 +33,12 @@ public static class HostingExtensions
     /// </remarks>
     /// <typeparam name="TApplication">The concrete type for the <see
     /// cref="Application"/> class.</typeparam>
-    /// <typeparam name="TMainWindow">The concrete type for the application's
-    /// main <see cref="Window"/>.</typeparam>
     /// <param name="hostBuilder">The host builder to which the WinUI service
     /// needs to be added.</param>
     /// <returns>The host builder for chaining calls.</returns>
     /// <exception cref="ArgumentException">When the application's type does not
     /// extend <see cref="Application"/>.</exception>
-    public static HostApplicationBuilder ConfigureWinUI<TApplication, TMainWindow>(this HostApplicationBuilder hostBuilder)
+    public static HostApplicationBuilder ConfigureWinUI<TApplication>(this HostApplicationBuilder hostBuilder)
         where TApplication : Application
     {
         var appType = typeof(TApplication);

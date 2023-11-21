@@ -26,9 +26,9 @@ using Microsoft.Extensions.Hosting;
 /// <remarks>
 /// <para>
 /// A convenience extension method <see
-/// cref="HostingExtensions.ConfigureWinUI{TApplication,
-/// TMainWindow}(HostApplicationBuilder)"/> is provided to simplify the setup of
-/// the User Interface hosted service for WinUI applications.
+/// cref="HostingExtensions.ConfigureWinUI{TApplication}(HostApplicationBuilder)"/>
+/// is provided to simplify the setup of the User Interface hosted service for
+/// WinUI applications.
 /// </para>
 /// <para>
 /// The WinUI service configuration supports customization, through a <see
@@ -69,7 +69,7 @@ public static partial class Program
         // Add the WinUI User Interface hosted service as early as possible to
         // allow the UI to start showing up while you continue setting up other
         // services not required for the UI.
-        var host = builder.ConfigureWinUI<App, MainWindow>().Build();
+        var host = builder.ConfigureWinUI<App>().Build();
 
         // Finally start the host. This will block until the application
         // lifetime is terminated through CTRL+C, closing the UI windows or
