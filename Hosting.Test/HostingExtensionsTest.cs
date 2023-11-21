@@ -64,6 +64,7 @@ public class HostingExtensionsTest
     /// provider.
     /// </summary>
     [Fact]
+    [Trait("Section", "Service")]
     public void RegistersUserInterfaceThread()
     {
         var builder = new HostApplicationBuilder();
@@ -79,6 +80,7 @@ public class HostingExtensionsTest
     /// Dependency Injector service provider.
     /// </summary>
     [Fact]
+    [Trait("Section", "Service")]
     public void RegistersUserInterfaceHostedService()
     {
         var builder = new HostApplicationBuilder();
@@ -96,15 +98,23 @@ public class HostingExtensionsTest
     /// cref="Application"/>.
     /// </summary>
     [Fact]
+    [Trait("Section", "Application")]
     public void RegistersApplication()
     {
-        var builder = new HostApplicationBuilder();
-        var host = builder.ConfigureWinUI<MyApp>().Build();
-        Assert.NotNull(host);
+        var builder = new HostApplicationBuilder().ConfigureWinUI<MyApp>();
+        Assert.Equal(2, builder.Services.Count(desc => desc.ServiceType.IsAssignableFrom(typeof(MyApp))));
+    }
 
-        var app = host.Services.GetRequiredService<HostingContext>();
-        var iApp = host.Services.GetRequiredService<IHostingContext>();
-        Assert.Equal(app, iApp);
+    /// <summary>
+    /// Tests that the <c>ConfigureWinUI()</c> extension can also work with an
+    /// application type that is exactly <see cref="Application"/>.
+    /// </summary>
+    [Fact]
+    [Trait("Section", "Application")]
+    public void RegistersApplicationWithBaseType()
+    {
+        var builder = new HostApplicationBuilder().ConfigureWinUI<MyApp>();
+        Assert.NotNull(builder.Services.Single(desc => desc.ServiceType.IsAssignableFrom(typeof(Application))));
     }
 }
 

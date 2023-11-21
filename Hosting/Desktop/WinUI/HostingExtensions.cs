@@ -41,8 +41,6 @@ public static class HostingExtensions
     public static HostApplicationBuilder ConfigureWinUI<TApplication>(this HostApplicationBuilder hostBuilder)
         where TApplication : Application
     {
-        var appType = typeof(TApplication);
-
         HostingContext context;
         if (((IHostApplicationBuilder)hostBuilder).Properties.TryGetValue(HostingContextKey, out var contextAsObject))
         {
@@ -62,20 +60,11 @@ public static class HostingExtensions
             .AddSingleton<UserInterfaceThread>()
             .AddHostedService<UserInterfaceHostedService>();
 
-        if (appType != null)
+        _ = hostBuilder.Services.AddSingleton<TApplication>();
+
+        if (typeof(TApplication) != typeof(Application))
         {
-            var baseApplicationType = typeof(Application);
-            if (!baseApplicationType.IsAssignableFrom(appType))
-            {
-                throw new ArgumentException("The registered Application type inherit System.Windows.Application", nameof(TApplication));
-            }
-
-            _ = hostBuilder.Services.AddSingleton<TApplication>();
-
-            if (appType != baseApplicationType)
-            {
-                _ = hostBuilder.Services.AddSingleton<Application>(services => services.GetRequiredService<TApplication>());
-            }
+            _ = hostBuilder.Services.AddSingleton<Application>(services => services.GetRequiredService<TApplication>());
         }
 
         return hostBuilder;
