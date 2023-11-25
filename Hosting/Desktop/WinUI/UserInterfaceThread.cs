@@ -18,17 +18,16 @@ using WinRT;
 /// in the `Main` entry point.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="UserInterfaceThread"/>
-/// class.
+/// Initializes a new instance of the <see cref="UserInterfaceThread"/> class.
 /// </remarks>
 /// <param name="serviceProvider">The Dependency Injector's <see
 /// cref="IServiceProvider"/>.</param>
-/// <param name="lifetime">The hosted application's lifetime used to
-/// coordinate the UI lifecycle with the application's lifecycle.</param>
-/// <param name="context">The hosting context, which should have been
-/// already provisioned in the Dependency Injector.</param>
-/// <param name="loggerFactory">Used to obtain a logger to be used by the
-/// User Interface thread.</param>
+/// <param name="lifetime">The hosted application's lifetime used to coordinate
+/// the UI lifecycle with the application's lifecycle.</param>
+/// <param name="context">The hosting context, which should have been already
+/// provisioned in the Dependency Injector.</param>
+/// <param name="loggerFactory">Used to obtain a logger to be used by the User
+/// Interface thread.</param>
 public class UserInterfaceThread(
     IServiceProvider serviceProvider,
     IHostApplicationLifetime lifetime,
@@ -57,8 +56,9 @@ public class UserInterfaceThread(
             this.HostingContext.Application = this.serviceProvider.GetRequiredService<Application>();
 
             /*
-             * TODO: here we can add code that initializes the UI before the main window is created and activated
-             * For example: unhandled exception handlers, maybe instancing, activation, etc...
+             * TODO: here we can add code that initializes the UI before the
+             * main window is created and activated For example: unhandled
+             * exception handlers, maybe instancing, activation, etc...
              * */
 
             // First window creation is to be handled in Application.OnLaunched()

@@ -27,8 +27,8 @@ public static class HostingExtensions
     /// <para>
     /// This helper sets up a <see cref="HostingContext"/> for the WinUI User
     /// Interface, creates a <see cref="UserInterfaceThread"/> and a <see
-    /// cref="UserInterfaceHostedService"/> to run it and provisions all of that
-    /// in the host's Dependency Injector.
+    /// cref="UserInterfaceHostedService"/> to run it and provisions all of
+    /// that in the host's Dependency Injector.
     /// </para>
     /// </remarks>
     /// <typeparam name="TApplication">The concrete type for the <see
@@ -36,8 +36,8 @@ public static class HostingExtensions
     /// <param name="hostBuilder">The host builder to which the WinUI service
     /// needs to be added.</param>
     /// <returns>The host builder for chaining calls.</returns>
-    /// <exception cref="ArgumentException">When the application's type does not
-    /// extend <see cref="Application"/>.</exception>
+    /// <exception cref="ArgumentException">When the application's type does
+    /// not extend <see cref="Application"/>.</exception>
     public static HostApplicationBuilder ConfigureWinUI<TApplication>(this HostApplicationBuilder hostBuilder)
         where TApplication : Application
     {
