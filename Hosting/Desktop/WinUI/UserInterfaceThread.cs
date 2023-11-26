@@ -59,7 +59,7 @@ public class UserInterfaceThread(
              * TODO: here we can add code that initializes the UI before the
              * main window is created and activated For example: unhandled
              * exception handlers, maybe instancing, activation, etc...
-             * */
+             */
 
             // First window creation is to be handled in Application.OnLaunched()
         });
