@@ -62,7 +62,7 @@ public partial class UserInterfaceHostedService(
         {
             Debug.Assert(
                 this.context.Application is not null,
-                "With `IsRunnin` being true, expecting the `Application` in the context to be not null.");
+                "With `IsRunning` being true, expecting the `Application` in the context to be not null.");
 
             this.StoppingUserInterfaceThread();
 
