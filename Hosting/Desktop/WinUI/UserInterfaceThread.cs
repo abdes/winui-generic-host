@@ -45,9 +45,8 @@ public class UserInterfaceThread(
         ComWrappersSupport.InitializeComWrappers();
 
     /// <inheritdoc />
-    protected override void UiThreadStart()
-    {
-        Application.Start(_ =>
+    protected override void UiThreadStart() => Application.Start(
+        _ =>
         {
             this.HostingContext.Dispatcher = DispatcherQueue.GetForCurrentThread();
             DispatcherQueueSynchronizationContext context = new(this.HostingContext.Dispatcher);
@@ -61,8 +60,6 @@ public class UserInterfaceThread(
              * exception handlers, maybe instancing, activation, etc...
              */
 
-            // First window creation is to be handled in Application.OnLaunched()
+            // NOTE: First window creation is to be handled in Application.OnLaunched()
         });
-        this.OnUserInterfaceThreadCompletion();
-    }
 }

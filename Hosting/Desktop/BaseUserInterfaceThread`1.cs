@@ -21,6 +21,11 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     private readonly ManualResetEvent serviceManualResetEvent = new(false);
     private readonly IHostApplicationLifetime hostApplicationLifetime;
 
+    // This manual reset event is signalled when the UI thread completes. It is
+    // primarily used in testing environment to ensure that the thread execution
+    // completes before the test results are verified.
+    private readonly ManualResetEvent uiThreadCompletion = new(false);
+
     /// <summary>
     /// Initializes a new instance of the <see
     /// cref="BaseUserInterfaceThread{T}"/> class.
@@ -44,6 +49,7 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
             _ = this.serviceManualResetEvent.WaitOne(); // wait for the signal to actually start
             this.HostingContext.IsRunning = true;
             this.UiThreadStart();
+            this.OnUserInterfaceThreadCompletion();
         })
         {
             IsBackground = true,
@@ -78,6 +84,11 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     /// service.
     public void Start() => this.serviceManualResetEvent.Set();
 
+    /// <summary>
+    /// Wait until the created User Interface Thread completes its execution.
+    /// </summary>
+    public void AwaitUiThreadCompletion() => this.uiThreadCompletion.WaitOne();
+
     /// <inheritdoc/>
     public void Dispose()
     {
@@ -102,23 +113,21 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     /// lifecycle are linked or not.
     /// </summary>
     /// <seealso cref="IHostingContext.IsLifetimeLinked"/>
-    protected void OnUserInterfaceThreadCompletion()
+    private void OnUserInterfaceThreadCompletion()
     {
         this.HostingContext.IsRunning = false;
-        if (!this.HostingContext.IsLifetimeLinked)
+        if (this.HostingContext.IsLifetimeLinked)
         {
-            return;
+            this.StoppingHostApplication();
+
+            if (!this.hostApplicationLifetime.ApplicationStopped.IsCancellationRequested &&
+                !this.hostApplicationLifetime.ApplicationStopping.IsCancellationRequested)
+            {
+                this.hostApplicationLifetime.StopApplication();
+            }
         }
 
-        this.StoppingHostApplication();
-
-        if (this.hostApplicationLifetime.ApplicationStopped.IsCancellationRequested ||
-            this.hostApplicationLifetime.ApplicationStopping.IsCancellationRequested)
-        {
-            return;
-        }
-
-        this.hostApplicationLifetime.StopApplication();
+        _ = this.uiThreadCompletion.Set();
     }
 
     [LoggerMessage(

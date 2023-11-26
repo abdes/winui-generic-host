@@ -2,26 +2,26 @@
 // at https://opensource.org/licenses/MIT).
 // SPDX-License-Identifier: MIT
 
-namespace HappyCoding.Hosting.Test.Desktop.WinUI;
+namespace HappyCoding.Hosting.Desktop.WinUI;
 
 using HappyCoding.Hosting.Desktop;
-using HappyCoding.Hosting.Desktop.WinUI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
-using Xunit;
+using NUnit.Framework;
 
 /// <summary>
 /// Uint tests for the <see cref="HostingExtensions"/> class.
 /// </summary>
+[TestFixture]
 public class HostingExtensionsTest
 {
     /// <summary>
     /// Tests that the <c>ConfigureWinUI()</c> extension prefers to use the
     /// context in the builder's Properties when available.
     /// </summary>
-    [Fact]
-    [Trait("Section", "Context")]
+    [Test]
+    [Category("Context")]
     public void WhenProvidedWithContextItUsesIt()
     {
         var builder = new HostApplicationBuilder();
@@ -33,29 +33,35 @@ public class HostingExtensionsTest
             value: new HostingContext() { IsLifetimeLinked = false });
 
         var host = builder.ConfigureWinUI<MyApp>().Build();
-        Assert.NotNull(host);
+        Assert.That(host, Is.Not.Null);
 
         var context = host.Services.GetRequiredService<HostingContext>();
         var iContext = host.Services.GetRequiredService<IHostingContext>();
-        Assert.Equal(context, iContext);
-        Assert.False(context.IsLifetimeLinked);
+        Assert.Multiple(() =>
+        {
+            Assert.That(iContext, Is.EqualTo(context));
+            Assert.That(context.IsLifetimeLinked, Is.False);
+        });
     }
 
     /// <summary>
     /// Tests that the <c>ConfigureWinUI()</c> extension creates and uses a default hosting context when not provided with one.
     /// </summary>
-    [Fact]
-    [Trait("Section", "Context")]
+    [Test]
+    [Category("Context")]
     public void WhenNotProvidedWithContextItUsesDefault()
     {
         var builder = new HostApplicationBuilder();
         var host = builder.ConfigureWinUI<MyApp>().Build();
-        Assert.NotNull(host);
+        Assert.That(host, Is.Not.Null);
 
         var context = host.Services.GetRequiredService<HostingContext>();
         var iContext = host.Services.GetRequiredService<IHostingContext>();
-        Assert.Equal(context, iContext);
-        Assert.True(context.IsLifetimeLinked); // default is true
+        Assert.Multiple(() =>
+        {
+            Assert.That(iContext, Is.EqualTo(context));
+            Assert.That(context.IsLifetimeLinked, Is.True); // default is true
+        });
     }
 
     /// <summary>
@@ -63,13 +69,13 @@ public class HostingExtensionsTest
     /// of <see cref="UserInterfaceThread"/> in the Dependency Injector service
     /// provider.
     /// </summary>
-    [Fact]
-    [Trait("Section", "Service")]
+    [Test]
+    [Category("Dependency Injector")]
     public void RegistersUserInterfaceThread()
     {
         var builder = new HostApplicationBuilder();
         var host = builder.ConfigureWinUI<MyApp>().Build();
-        Assert.NotNull(host);
+        Assert.That(host, Is.Not.Null);
 
         _ = host.Services.GetRequiredService<UserInterfaceThread>();
     }
@@ -79,16 +85,16 @@ public class HostingExtensionsTest
     /// of <see cref="UserInterfaceHostedService"/> as a IHostedService in the
     /// Dependency Injector service provider.
     /// </summary>
-    [Fact]
-    [Trait("Section", "Service")]
+    [Test]
+    [Category("Dependency Injector")]
     public void RegistersUserInterfaceHostedService()
     {
         var builder = new HostApplicationBuilder();
         var host = builder.ConfigureWinUI<MyApp>().Build();
-        Assert.NotNull(host);
+        Assert.That(host, Is.Not.Null);
 
         var uiService = host.Services.GetServices<IHostedService>().First(service => service is UserInterfaceHostedService);
-        Assert.NotNull(uiService);
+        Assert.That(uiService, Is.Not.Null);
     }
 
     /// <summary>
@@ -97,24 +103,24 @@ public class HostingExtensionsTest
     /// which can be found either using the specific type or the base type <see
     /// cref="Application"/>.
     /// </summary>
-    [Fact]
-    [Trait("Section", "Application")]
+    [Test]
+    [Category("Dependency Injector")]
     public void RegistersApplication()
     {
         var builder = new HostApplicationBuilder().ConfigureWinUI<MyApp>();
-        Assert.Equal(2, builder.Services.Count(desc => desc.ServiceType.IsAssignableFrom(typeof(MyApp))));
+        Assert.That(builder.Services.Count(desc => desc.ServiceType.IsAssignableFrom(typeof(MyApp))), Is.EqualTo(2));
     }
 
     /// <summary>
     /// Tests that the <c>ConfigureWinUI()</c> extension can also work with an
     /// application type that is exactly <see cref="Application"/>.
     /// </summary>
-    [Fact]
-    [Trait("Section", "Application")]
+    [Test]
+    [Category("Dependency Injector")]
     public void RegistersApplicationWithBaseType()
     {
         var builder = new HostApplicationBuilder().ConfigureWinUI<MyApp>();
-        Assert.NotNull(builder.Services.Single(desc => desc.ServiceType.IsAssignableFrom(typeof(Application))));
+        Assert.That(builder.Services.Single(desc => desc.ServiceType.IsAssignableFrom(typeof(Application))), Is.Not.Null);
     }
 }
 
