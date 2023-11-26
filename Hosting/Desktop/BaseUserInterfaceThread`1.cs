@@ -41,7 +41,7 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
         var newUiThread = new Thread(() =>
         {
             this.PreUiThreadStart();
-            this.serviceManualResetEvent.WaitOne(); // wait for the signal to actually start
+            _ = this.serviceManualResetEvent.WaitOne(); // wait for the signal to actually start
             this.HostingContext.IsRunning = true;
             this.UiThreadStart();
         })
