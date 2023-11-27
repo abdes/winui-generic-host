@@ -21,18 +21,30 @@ public static class HostingExtensions
     public const string HostingContextKey = "UserInterfaceHostingContext";
 
     /// <summary>
-    /// Configures the hosting for a WinUI based User Interface service.
+    /// Configures the host builder for a Windows UI (WinUI) application.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// This helper sets up a <see cref="HostingContext"/> for the WinUI User
-    /// Interface, creates a <see cref="UserInterfaceThread"/> and a <see
-    /// cref="UserInterfaceHostedService"/> to run it and provisions all of
-    /// that in the host's Dependency Injector.
-    /// </para>
-    /// </remarks>
     /// <typeparam name="TApplication">The concrete type for the <see
     /// cref="Application"/> class.</typeparam>
+    /// <remarks>
+    /// <para>
+    /// This method configures the host builder to support a Windows UI (WinUI)
+    /// application. It sets up the necessary services, including the hosting
+    /// context, user interface thread, and the hosted service for the user
+    /// interface.
+    /// </para>
+    /// <para>
+    /// It attempts to find a <see cref="HostingContext"/> instance from the
+    /// host builder properties and if not available creates one and adds it as
+    /// a singleton service and as an <see cref="IHostingContext"/> service for
+    /// use by the <see cref="UserInterfaceHostedService"/>.
+    /// </para>
+    /// <para>
+    /// Upon successful completion, the dependency injector will be able to
+    /// provide the single instance of the application as a
+    /// <typeparamref name="TApplication"/> and as an <see cref="Application"/>
+    /// if it is not the same type.
+    /// </para>
+    /// </remarks>
     /// <param name="hostBuilder">The host builder to which the WinUI service
     /// needs to be added.</param>
     /// <returns>The host builder for chaining calls.</returns>

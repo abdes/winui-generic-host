@@ -7,19 +7,20 @@ namespace HappyCoding.Hosting.Desktop.WinUI;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 /// <summary>
 /// A long running service that will execute the User Interface thread.
-/// <para>
-/// Should be registered (only once) with the
-/// `AddHostedService&lt;UserInterfaceHostedService&gt;(IServiceCollection)`
-/// extension method.
-/// </para>
 /// </summary>
 /// <remarks>
+/// <para>
+/// Should be registered (only once) in the services collection with the <see
+/// cref="ServiceCollectionHostedServiceExtensions.AddHostedService{THostedService}(IServiceCollection)">
+/// AddHostedService</see> extension method.
+/// </para>
 /// <para>
 /// Expects the <see cref="UserInterfaceThread"/> and <see
 /// cref="HostingContext"/> singleton instances to be setup in the dependency

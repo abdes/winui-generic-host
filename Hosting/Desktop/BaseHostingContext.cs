@@ -7,11 +7,10 @@ namespace HappyCoding.Hosting.Desktop;
 /// <summary>
 /// Represents the minimal information used to manage the hosting of the User
 /// Interface service and associated thread.
-/// <para>
-/// Extend this class to add data specific to the User Interface framework
-/// (e.g. WinUI).
-/// </para>
 /// </summary>
+/// <remarks>
+/// Extend this class to add data, specific to the UI framework (e.g. WinUI).
+/// </remarks>
 public class BaseHostingContext : IHostingContext
 {
     /// <inheritdoc/>

@@ -8,12 +8,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
-/// The basic lifecycle management for the UI thread.
+/// Represents a base class for a user interface thread in a hosted
+/// application.
 /// </summary>
 /// <typeparam name="T">The concrete type of the class implementing <see
 /// cref="IHostingContext"/> which will provide the necessary options to setup
-/// the User Interface thread and hold the key objects required for the user
-/// interface application.</typeparam>
+/// the User Interface.</typeparam>
 public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     where T : class, IHostingContext
 {
@@ -30,12 +30,21 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     /// Initializes a new instance of the <see
     /// cref="BaseUserInterfaceThread{T}"/> class.
     /// </summary>
-    /// <param name="lifetime">Allows the User Interface thread to adjust its
-    /// behavior based on the host application lifetime.</param>
-    /// <param name="context">The hosting context for the User Interface
-    /// service.</param>
-    /// <param name="logger">The logger to be used by this class (and its
-    /// derived class).</param>
+    /// <remarks>
+    /// This constructor creates a new thread that runs the UI. The thread is
+    /// set to be a background thread with a single-threaded apartment state.
+    /// The thread will wait for a signal from the <see
+    /// cref="serviceManualResetEvent"/> before starting the user interface.
+    /// The constructor also calls the <see cref="BeforeStart"/> and <see
+    /// cref="OnCompletion"/> methods to perform any initialization and cleanup
+    /// tasks.
+    /// </remarks>
+    /// <param name="lifetime">The hosted application lifetime. Used when the
+    /// hosting context indicates that that the UI and the hosted application
+    /// liftetimes are linked.</param>
+    /// <param name="context">The UI service hosting context, partially
+    /// populated with the configuration options for the UI thread.</param>
+    /// <param name="logger">The logger to be used by this class.</param>
     protected BaseUserInterfaceThread(IHostApplicationLifetime lifetime, T context, ILogger logger)
     {
         this.hostApplicationLifetime = lifetime;
@@ -45,11 +54,11 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
         // Create a thread which runs the UI
         var newUiThread = new Thread(() =>
         {
-            this.PreUiThreadStart();
+            this.BeforeStart();
             _ = this.serviceManualResetEvent.WaitOne(); // wait for the signal to actually start
             this.HostingContext.IsRunning = true;
-            this.UiThreadStart();
-            this.OnUserInterfaceThreadCompletion();
+            this.DoStart();
+            this.OnCompletion();
         })
         {
             IsBackground = true,
@@ -97,23 +106,22 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     }
 
     /// <summary>
-    /// Do all the initialization work needed to be done before the User
-    /// Interface thread can start.
+    /// Called before the UI thread is started to do any initialization work.
     /// </summary>
-    protected abstract void PreUiThreadStart();
+    protected abstract void BeforeStart();
 
     /// <summary>
-    /// Do the work needed to start the User Interface thread.
+    /// Do the work needed to actually start the User Interface thread.
     /// </summary>
-    protected abstract void UiThreadStart();
+    protected abstract void DoStart();
 
     /// <summary>
-    /// Handle the situation after the User Interface thread completes (i.e. no
-    /// more UI) depending on whether the UI lifecycle and the application
-    /// lifecycle are linked or not.
+    /// Called upon completion of the UI thread (i.e. no more UI). Will
+    /// eventually request the hosted application to stop depending on whether
+    /// the UI lifecycle and the application lifecycle are linked or not.
     /// </summary>
     /// <seealso cref="IHostingContext.IsLifetimeLinked"/>
-    private void OnUserInterfaceThreadCompletion()
+    private void OnCompletion()
     {
         this.HostingContext.IsRunning = false;
         if (this.HostingContext.IsLifetimeLinked)
@@ -133,6 +141,6 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     [LoggerMessage(
         SkipEnabledCheck = true,
         Level = LogLevel.Debug,
-        Message = "Stopping host application due to user interface thread exit.")]
+        Message = "Stopping hosted application due to user interface thread exit.")]
     partial void StoppingHostApplication();
 }

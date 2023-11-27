@@ -52,8 +52,8 @@ public class BaseUserInterfaceThreadTests
     }
 
     /// <summary>
-    /// Tests the different lifecycle actions during the User Interface Thread
-    /// startup.
+    /// Tests that when the application lifetime and the UI thread lifetime are
+    /// linked, completion of the UI thread leads to the application stopping.
     /// </summary>
     [Test]
     [Category("Lifecycle")]
@@ -83,8 +83,9 @@ public class BaseUserInterfaceThreadTests
     }
 
     /// <summary>
-    /// Tests the different lifecycle actions during the User Interface Thread
-    /// startup.
+    /// Tests that when the application lifetime and the UI thread lifetime are
+    /// not linked, completion of the UI thread does not result in the
+    /// application stopping.
     /// </summary>
     [Test]
     [Category("Lifecycle")]
