@@ -56,7 +56,7 @@ termination of the application or not, and vice versa.
 ## An extension method for the builder
 
 To simplify the setup of the User Interface hosted service, an [extension
-method](App/Hosting/Desktop/WinUI/HostingExtensions.cs) to the host builder is
+method](Hosting/Desktop/WinUI/HostingExtensions.cs) to the host builder is
 provided.
 
 This greatly simplifies the host building as it is now just a matter of calling
