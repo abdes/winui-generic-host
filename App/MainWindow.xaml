@@ -9,12 +9,26 @@
     <StackPanel HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
                 Orientation="Vertical">
-        <Expander>
+        <Expander HorizontalContentAlignment="Left"
+                  IsExpanded="True">
             <Expander.Header>
-                <TextBlock Text="CommandLine Arguments" />
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="CommandLine Arguments" />
             </Expander.Header>
             <Expander.Content>
                 <StackPanel Orientation="Vertical">
+                    <TextBlock Width="400"
+                               Margin="0,0,0,10"
+                               TextWrapping="Wrap">
+                        Try launching the application with the command line like this:
+                    </TextBlock>
+                    <TextBlock Width="400"
+                               Margin="0,0,0,30"
+                               FontStyle="Italic"
+                               TextWrapping="Wrap">
+                        --int-value=125 --string-value="just a string from the command line" --boolean-flag=true
+                    </TextBlock>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="200">Boolean Flag:</TextBlock>
                         <TextBlock Text="{x:Bind booleanFlag}" />
@@ -30,24 +44,31 @@
                 </StackPanel>
             </Expander.Content>
         </Expander>
-        <Expander>
+        <Expander HorizontalContentAlignment="Left"
+                  IsExpanded="True">
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Custom Configuration Section: " />
-                    <TextBlock Text="{x:Bind settingsSectionName}" />
+                    <TextBlock FontSize="20"
+                               FontWeight="Bold"
+                               Text="Custom Configuration Section" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
                 <TextBlock Text="{x:Bind settings.Greeting}" />
             </Expander.Content>
         </Expander>
-        <Button x:Name="LogSomethingButton"
-                Click="LogSomething">
-            Click me to emit a log (Warning level)!
-        </Button>
-        <Button x:Name="ExitButton"
-                Click="Exit">
-            Click me to Exit the Application!
-        </Button>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="LogSomethingButton"
+                    Margin="20,20,10,20"
+                    Click="LogSomething">
+                Click me to emit a log (Warning level)!
+            </Button>
+            <Button x:Name="ExitButton"
+                    Margin="10,20,10,20"
+                    Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                    Click="Exit">
+                Click me to Exit the Application!
+            </Button>
+        </StackPanel>
     </StackPanel>
 </Window>
