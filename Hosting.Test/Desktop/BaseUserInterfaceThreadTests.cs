@@ -35,20 +35,20 @@ public class BaseUserInterfaceThreadTests
         {
             CallBase = true,
         };
-        mockThread.Protected().Setup("PreUiThreadStart");
-        mockThread.Protected().Setup("UiThreadStart");
+        mockThread.Protected().Setup("BeforeStart");
+        mockThread.Protected().Setup("DoStart");
 
         var thread = mockThread.Object;
 
-        mockThread.Protected().Verify("PreUiThreadStart", Times.Once());
-        mockThread.Protected().Verify("UiThreadStart", Times.Never());
+        mockThread.Protected().Verify("BeforeStart", Times.Once());
+        mockThread.Protected().Verify("DoStart", Times.Never());
 
         // Start he UI thread and wait until it completes before testing for assertions.
         thread.Start();
         thread.AwaitUiThreadCompletion();
 
-        mockThread.Protected().Verify("PreUiThreadStart", Times.Once());
-        mockThread.Protected().Verify("UiThreadStart", Times.Once());
+        mockThread.Protected().Verify("BeforeStart", Times.Once());
+        mockThread.Protected().Verify("DoStart", Times.Once());
     }
 
     /// <summary>
