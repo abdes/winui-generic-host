@@ -45,10 +45,10 @@ advantage of managing the UI just as another service, and of course getting all
 the goodies of the Generic Host listed above.
 
 The implementation, extensively documented in the source code, adds a
-[UserInterfaceHostedService](App/Hosting/Desktop/WinUI/UserInterfaceHostedService.cs)
-which runs the ['UI Thread'](App/Hosting/Desktop/WinUI/UserInterfaceThread.cs)
+[UserInterfaceHostedService](Hosting/Desktop/WinUI/UserInterfaceHostedService.cs)
+which runs the ['UI Thread'](Hosting/Desktop/WinUI/UserInterfaceThread.cs)
 as a background service. We can decide, based on the options in the
-[HostingContext](App/Hosting/Desktop/WinUI/HostingContext.cs) if we want the
+[HostingContext](Hosting/Desktop/WinUI/HostingContext.cs) if we want the
 lifetime of that 'UI Thread' to be linked to the application lifetime or not. In
 other words, we can decide of termination of the 'UI Thread' results in
 termination of the application or not, and vice versa.
