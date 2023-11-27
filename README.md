@@ -6,10 +6,11 @@ look like they are only for ASP .Net but they are not. The documentation now
 introduces them as part of the [.Net
 fundamentals](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host)
 and they can very well be used in any scenario including console and desktop
-applications. 
+applications.
 
 A host is an object that encapsulates an app's resources and lifetime
 functionality, such as:
+
 - Dependency injection (DI)
 - Configuration (in-memory, json, secrets, environment variables, command line)
 - Logging
@@ -19,8 +20,8 @@ functionality, such as:
 
 ➡ What if we could leverage all of that in a WinUI application?
 
-You really don't need a dozen of Nugets from many maintend or no longer
-maintained sources. All of that can be done with just the .Net framwork. Let's
+You really don't need a dozen of Nugets from many maintained or no longer
+maintained sources. All of that can be done with just the .Net framework. Let's
 see how.
 
 ## Before we start
@@ -30,7 +31,7 @@ a custom `Main` entry point. Not that it is absolutely required, but it will
 give us full control of the setup of the Generic Host environment and will make
 the WinUI subsystem just another service for which we manage the lifecycle.
 
-See https://github.com/abdes/winui-override-main for the basics of how to
+See <https://github.com/abdes/winui-override-main> for the basics of how to
 override the default entry point.
 
 ## A hosted service for WinUI
@@ -40,7 +41,7 @@ and for which the dispatched is initialized in the `Main` entry point.
 
 What we want is to have that thread be a background service, hosted by the
 generic host, along with the other application services. This will give us the
-advnatage of managing the UI just as another service, and of course getting all
+advantage of managing the UI just as another service, and of course getting all
 the goodies of the Generic Host listed above.
 
 The implementation, extensively documented in the source code, adds a
@@ -94,10 +95,10 @@ that extension method.
 
 Simply because not all applications are single window applications and it is not
 obvious in a multi-window application which window will terminate the UI when
-closed. Therefore, it is much more preferrable to continue having the
+closed. Therefore, it is much more preferable to continue having the
 `Application` responsible for managing its `Window`s.
 
 ## Can this be adapted to WPF, etc. ?
 
-Yes. Simply implemnt the classes inside WinUI namespace for any other UI
+Yes. Simply implement the classes inside WinUI namespace for any other UI
 framework.
