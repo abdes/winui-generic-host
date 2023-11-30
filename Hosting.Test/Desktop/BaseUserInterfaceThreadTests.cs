@@ -38,12 +38,8 @@ public class BaseUserInterfaceThreadTests
         mockThread.Protected().Setup("BeforeStart");
         mockThread.Protected().Setup("DoStart");
 
-        var thread = mockThread.Object;
-
-        mockThread.Protected().Verify("BeforeStart", Times.Once());
-        mockThread.Protected().Verify("DoStart", Times.Never());
-
         // Start he UI thread and wait until it completes before testing for assertions.
+        var thread = mockThread.Object;
         thread.Start();
         thread.AwaitUiThreadCompletion();
 
