@@ -1,0 +1,99 @@
+# This workflow will build, sign, and package a WinUI 3 MSIX desktop application
+# built on .NET.
+
+name: WinUI 3 MSIX app
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug]
+        platform: [x64]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: Navigation    # Replace with your solution name, i.e. App1.sln.
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.3
+      with:
+        msbuild-architecture: x64
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: msbuild ${{ env.Solution_Name }}.sln /t:Restore /p:Configuration=$env:Configuration /p:Platform=$env:Platform
+      env:
+        Configuration: ${{ matrix.configuration }}
+        Platform: ${{ matrix.platform }}
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Build the solution
+      run: msbuild ${{ env.Solution_Name }}.sln /t:Build /p:RestorePackages=false /p:Configuration=$env:Configuration /p:Platform=$env:Platform
+      env:
+        Configuration: ${{ matrix.configuration }}
+        Platform: ${{ matrix.platform }}
+
+    # Run unit tests
+    - name: Run Tests
+      shell: pwsh
+      env:
+        Configuration: ${{ matrix.configuration }}
+        Platform: ${{ matrix.platform }}
+      run: |
+        # Get all the directories in the current directory that end with ".Test"
+        $dirs = Get-ChildItem -Directory -Filter "*.Test"
+
+        # Loop through each directory
+        foreach ($dir in $dirs) {
+            # Execute the dotnet test command
+            dotnet test $dir /property:Platform=$env:Platform -c $env:Configuration --no-build --nologo -v n
+        }
+
+    # Decode the base 64 encoded pfx and save the Signing_Certificate
+    - name: Decode the pfx
+      id: pfxFile
+      uses: timheuer/base64-to-file@v1.2
+      with:
+        fileName: 'GitHubActionsWorkflow.pfx'
+        encodedString: ${{ secrets.CODE_SIGN_CERTIFICATE }}
+
+    # Create the app package by building and packaging the project
+    - name: Create the app package
+      run: msbuild ${{ env.Solution_Name }}.sln /p:RestorePackages=false /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile="${{ steps.pfxFile.outputs.filePath }}" /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true
+      env:
+        Appx_Bundle: Never
+        Appx_Package_Build_Mode: SideloadOnly
+        Appx_Package_Dir: ../Packages
+        Configuration: ${{ matrix.configuration }}
+        Platform: ${{ matrix.platform }}
+
+    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
+    - name: Upload MSIX package
+      uses: actions/upload-artifact@v2
+      with:
+        name: MSIX Package
+        path: Packages
