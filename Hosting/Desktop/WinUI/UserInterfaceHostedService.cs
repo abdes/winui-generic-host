@@ -42,14 +42,10 @@ using Microsoft.Extensions.Logging.Abstractions;
 public partial class UserInterfaceHostedService(
     ILoggerFactory loggerFactory,
     UserInterfaceThread uiThread,
-    HostingContext context) : IHostedService
+    IHostingContext context) : IHostedService
 {
-    private readonly HostingContext context = context;
-
     private readonly ILogger<UserInterfaceHostedService> logger
         = loggerFactory.CreateLogger<UserInterfaceHostedService>();
-
-    private readonly UserInterfaceThread uiThread = uiThread;
 
     /// <inheritdoc />
     public Task StartAsync(CancellationToken cancellationToken)
@@ -60,26 +56,26 @@ public partial class UserInterfaceHostedService(
         }
 
         // Make the UI thread go
-        this.uiThread.Start();
+        uiThread.Start();
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        if (this.context.IsRunning)
+        if (context.IsRunning && context is HostingContext concreteContext)
         {
             Debug.Assert(
-                this.context.Application is not null,
+                concreteContext.Application is not null,
                 "With `IsRunning` being true, expecting the `Application` in the context to be not null.");
 
             this.StoppingUserInterfaceThread();
 
             TaskCompletionSource completion = new();
-            _ = this.context.Dispatcher!.TryEnqueue(
+            _ = concreteContext.Dispatcher!.TryEnqueue(
                 () =>
                 {
-                    this.context.Application.Exit();
+                    concreteContext.Application.Exit();
                     completion.SetResult();
                 });
             await completion.Task;

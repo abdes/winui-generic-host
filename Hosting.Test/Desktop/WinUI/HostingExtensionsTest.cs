@@ -133,6 +133,4 @@ public class HostingExtensionsTest
     }
 }
 
-internal sealed class MyApp : Application
-{
-}
+internal sealed class MyApp : Application;

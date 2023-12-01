@@ -16,14 +16,14 @@ namespace HappyCoding.Hosting.Desktop;
 public interface IHostingContext
 {
     /// <summary>
-    /// Gets or sets a value indicating whether the UI lifecycle and the Hosted
+    /// Gets a value indicating whether the UI lifecycle and the Hosted
     /// Application lifecycle are linked or not.
     /// </summary>
     /// <value>
     /// When <c>true</c>, termination of the UI thread leads to termination of
     /// the Hosted Application and vice versa.
     /// </value>
-    bool IsLifetimeLinked { get; set; }
+    bool IsLifetimeLinked { get; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the UI thread is running or

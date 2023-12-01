@@ -111,7 +111,7 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        this.serviceManualResetEvent?.Dispose();
+        this.serviceManualResetEvent.Dispose();
     }
 
     /// <summary>

@@ -59,8 +59,7 @@ public class BaseUserInterfaceThreadTests
     [Category("Lifecycle")]
     public void LinkedLifetimeCompletion()
     {
-        var mockContext = new Mock<BaseHostingContext>();
-        mockContext.Object.IsLifetimeLinked = true;
+        var mockContext = new Mock<BaseHostingContext> { Object = { IsLifetimeLinked = true } };
 
         var mockLifeTime = new Mock<IHostApplicationLifetime>();
         var mockLogger = new Mock<ILogger>();
@@ -91,8 +90,7 @@ public class BaseUserInterfaceThreadTests
     [Category("Lifecycle")]
     public void IndependentLifetimeCompletion()
     {
-        var mockContext = new Mock<BaseHostingContext>();
-        mockContext.Object.IsLifetimeLinked = false;
+        var mockContext = new Mock<BaseHostingContext> { Object = { IsLifetimeLinked = false } };
 
         var mockLifeTime = new Mock<IHostApplicationLifetime>();
         var mockLogger = new Mock<ILogger>();
