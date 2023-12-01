@@ -77,7 +77,6 @@ jobs:
       uses: codecov/codecov-action@v3
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        file: "*.opencover.xml"
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
