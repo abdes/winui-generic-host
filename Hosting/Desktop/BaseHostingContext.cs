@@ -13,9 +13,9 @@ namespace HappyCoding.Hosting.Desktop;
 /// </remarks>
 public class BaseHostingContext : IHostingContext
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public bool IsLifetimeLinked { get; set; }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public bool IsRunning { get; set; }
 }

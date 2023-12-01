@@ -11,39 +11,42 @@ using Microsoft.Extensions.Logging;
 /// Represents a base class for a user interface thread in a hosted
 /// application.
 /// </summary>
-/// <typeparam name="T">The concrete type of the class implementing <see
-/// cref="IHostingContext"/> which will provide the necessary options to setup
-/// the User Interface.</typeparam>
+/// <typeparam name="T">
+/// The concrete type of the class implementing <see cref="IHostingContext" />
+/// which will provide the necessary options to setup the User Interface.
+/// </typeparam>
 public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     where T : class, IHostingContext
 {
+    private readonly IHostApplicationLifetime hostApplicationLifetime;
     private readonly ILogger logger;
     private readonly ManualResetEvent serviceManualResetEvent = new(false);
-    private readonly IHostApplicationLifetime hostApplicationLifetime;
 
-    // This manual reset event is signalled when the UI thread completes. It is
+    // This manual reset event is signaled when the UI thread completes. It is
     // primarily used in testing environment to ensure that the thread execution
     // completes before the test results are verified.
     private readonly ManualResetEvent uiThreadCompletion = new(false);
 
     /// <summary>
-    /// Initializes a new instance of the <see
-    /// cref="BaseUserInterfaceThread{T}"/> class.
+    /// Initializes a new instance of the <see cref="BaseUserInterfaceThread{T}" /> class.
     /// </summary>
     /// <remarks>
     /// This constructor creates a new thread that runs the UI. The thread is
     /// set to be a background thread with a single-threaded apartment state.
-    /// The thread will wait for a signal from the <see
-    /// cref="serviceManualResetEvent"/> before starting the user interface.
-    /// The constructor also calls the <see cref="BeforeStart"/> and <see
-    /// cref="OnCompletion"/> methods to perform any initialization and cleanup
-    /// tasks.
+    /// The thread will wait for a signal from the <see cref="serviceManualResetEvent" />
+    /// before starting the user interface. The constructor also calls the
+    /// <see cref="BeforeStart" /> and <see cref="OnCompletion" /> methods to
+    /// perform any initialization and cleanup tasks.
     /// </remarks>
-    /// <param name="lifetime">The hosted application lifetime. Used when the
-    /// hosting context indicates that that the UI and the hosted application
-    /// liftetimes are linked.</param>
-    /// <param name="context">The UI service hosting context, partially
-    /// populated with the configuration options for the UI thread.</param>
+    /// <param name="lifetime">
+    /// The hosted application lifetime. Used when the hosting context
+    /// indicates that that the UI and the hosted application lifetimes are
+    /// linked.
+    /// </param>
+    /// <param name="context">
+    /// The UI service hosting context, partially populated with the
+    /// configuration options for the UI thread.
+    /// </param>
     /// <param name="logger">The logger to be used by this class.</param>
     protected BaseUserInterfaceThread(IHostApplicationLifetime lifetime, T context, ILogger logger)
     {
@@ -52,14 +55,15 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
         this.logger = logger;
 
         // Create a thread which runs the UI
-        var newUiThread = new Thread(() =>
-        {
-            this.BeforeStart();
-            _ = this.serviceManualResetEvent.WaitOne(); // wait for the signal to actually start
-            this.HostingContext.IsRunning = true;
-            this.DoStart();
-            this.OnCompletion();
-        })
+        var newUiThread = new Thread(
+            () =>
+            {
+                this.BeforeStart();
+                _ = this.serviceManualResetEvent.WaitOne(); // wait for the signal to actually start
+                this.HostingContext.IsRunning = true;
+                this.DoStart();
+                this.OnCompletion();
+            })
         {
             IsBackground = true,
         };
@@ -73,32 +77,37 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
         newUiThread.Start();
     }
 
-    /// <summary>Gets the instance of <see cref="IHostingContext"/> for the
-    /// user interface service.</summary>
-    /// <value>Although never <c>null</c>, the different fields of the hosting
-    /// context may or may not contain valid values depending on the current
-    /// state of the User Interface thread. Refer to the concrete class
-    /// documentation.</value>
+    /// <summary>
+    /// Gets the instance of <see cref="IHostingContext" /> for the user
+    /// interface service.
+    /// </summary>
+    /// <value>
+    /// Although never <c>null</c>, the different fields of the hosting context
+    /// may or may not contain valid values depending on the current state of
+    /// the User Interface thread. Refer to the concrete class documentation.
+    /// </value>
     protected T HostingContext { get; }
 
     /// <summary>
     /// Actually starts the User Interface thread by setting the underlying
-    /// <see cref="ManualResetEvent"/>.
+    /// <see cref="ManualResetEvent" />.
     /// </summary>
     /// Initially, the User Interface thread is created and transitioned into
     /// the `RUNNING` state, but it is waiting to be explicitly started via the
-    /// <see cref="ManualResetEvent"/> so that we can ensure everything
+    /// <see cref="ManualResetEvent" />
+    /// so that we can ensure everything
     /// required for the UI is initialized before we start it. The
     /// responsibility for triggering this rests with the User Interface hosted
     /// service.
     public void Start() => this.serviceManualResetEvent.Set();
 
     /// <summary>
-    /// Wait until the created User Interface Thread completes its execution.
+    /// Wait until the created User Interface Thread completes its
+    /// execution.
     /// </summary>
     public void AwaitUiThreadCompletion() => this.uiThreadCompletion.WaitOne();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Dispose()
     {
         GC.SuppressFinalize(this);
@@ -106,7 +115,8 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     }
 
     /// <summary>
-    /// Called before the UI thread is started to do any initialization work.
+    /// Called before the UI thread is started to do any
+    /// initialization work.
     /// </summary>
     protected abstract void BeforeStart();
 
@@ -120,7 +130,7 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     /// eventually request the hosted application to stop depending on whether
     /// the UI lifecycle and the application lifecycle are linked or not.
     /// </summary>
-    /// <seealso cref="IHostingContext.IsLifetimeLinked"/>
+    /// <seealso cref="IHostingContext.IsLifetimeLinked" />
     private void OnCompletion()
     {
         this.HostingContext.IsRunning = false;

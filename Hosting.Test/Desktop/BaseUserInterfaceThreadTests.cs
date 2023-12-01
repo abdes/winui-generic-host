@@ -11,7 +11,7 @@ using Moq.Protected;
 using NUnit.Framework;
 
 /// <summary>
-/// Uint tests for the <see cref="BaseUserInterfaceThread{T}"/> class.
+/// Uint tests for the <see cref="BaseUserInterfaceThread{T}" /> class.
 /// </summary>
 [TestFixture]
 public class BaseUserInterfaceThreadTests
@@ -35,16 +35,20 @@ public class BaseUserInterfaceThreadTests
         {
             CallBase = true,
         };
-        mockThread.Protected().Setup("BeforeStart");
-        mockThread.Protected().Setup("DoStart");
+        mockThread.Protected()
+            .Setup("BeforeStart");
+        mockThread.Protected()
+            .Setup("DoStart");
 
         // Start he UI thread and wait until it completes before testing for assertions.
         var thread = mockThread.Object;
         thread.Start();
         thread.AwaitUiThreadCompletion();
 
-        mockThread.Protected().Verify("BeforeStart", Times.Once());
-        mockThread.Protected().Verify("DoStart", Times.Once());
+        mockThread.Protected()
+            .Verify("BeforeStart", Times.Once());
+        mockThread.Protected()
+            .Verify("DoStart", Times.Once());
     }
 
     /// <summary>

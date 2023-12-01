@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <!-- Meta Options -->
-    <Authors>Abdessattar Sassi</Authors>
-    <Copyright>©2021-2023 Abdessattar Sassi</Copyright>
-    <PackageProjectUrl>https://github.com/abdes/winui-generic-host</PackageProjectUrl>
-    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PropertyGroup>
+        <!-- Meta Options -->
+        <Authors>Abdessattar Sassi</Authors>
+        <Copyright>©2021-2023 Abdessattar Sassi</Copyright>
+        <PackageProjectUrl>https://github.com/abdes/winui-generic-host</PackageProjectUrl>
+        <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- Build Options -->
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-    <LangVersion>12.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="$([MSBUILD]::NormalizePath($(MSBuildThisFileDirectory), 'stylecop.json'))" Link="stylecop.json" />
-  </ItemGroup>
+        <!-- Build Options -->
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <LangVersion>12.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="$([MSBUILD]::NormalizePath($(MSBuildThisFileDirectory), 'stylecop.json'))"
+                         Link="stylecop.json" />
+    </ItemGroup>
 </Project>
