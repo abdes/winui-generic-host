@@ -5,14 +5,10 @@
         <Platforms>x64;arm64</Platforms>
         <RuntimeIdentifiers>win10-x64;win10-arm64</RuntimeIdentifiers>
         <UseWinUI>true</UseWinUI>
-        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
-        <AccelerateBuildsInVisualStudio>True</AccelerateBuildsInVisualStudio>
 
         <!-- https://github.com/microsoft/WindowsAppSDK/issues/3842 -->
         <UseRidGraph>true</UseRidGraph>
 
-        <Nullable>enable</Nullable>
         <RootNamespace>HappyCoding.Hosting</RootNamespace>
         <AssemblyName>HappyCoding.Hosting</AssemblyName>
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,17 +17,11 @@
         <Authors>Abdessattar Sassi</Authors>
         <Company>Happy Coding</Company>
         <Description>A small library to easily integrate the WinUI thread as a hosted service in a Microsoft.Extensions.Hosting host which will provide configuration, DI, logging and lifetime management for free.</Description>
-        <PackageProjectUrl>https://github.com/abdes/winui-generic-host</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <RepositoryUrl>https://github.com/abdes/winui-generic-host</RepositoryUrl>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <RepositoryType>git</RepositoryType>
         <PackageTags>csharp;dependency-injection;configuration;host;lifecycle;winui</PackageTags>
         <PackageReleaseNotes>
             Initial Version.
         </PackageReleaseNotes>
-        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
