@@ -20,14 +20,14 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>csharp;dependency-injection;configuration;host;lifecycle;winui</PackageTags>
         <PackageReleaseNotes>
-            Initial Version.
+            More unit testing and some refactoring to further improve code quality.
         </PackageReleaseNotes>
         <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-        <Version>1.0.1</Version>
+        <Version>1.1.0</Version>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
         <WarningLevel>9999</WarningLevel>

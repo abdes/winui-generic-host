@@ -24,6 +24,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DefineConstants>DISABLE_XAML_GENERATED_MAIN</DefineConstants>
         <StartupObject>Demo.Program</StartupObject>
+        <Version>1.1.0</Version>
 
     </PropertyGroup>
     <ItemGroup>
