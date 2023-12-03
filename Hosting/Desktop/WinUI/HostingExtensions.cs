@@ -36,7 +36,7 @@ public static class HostingExtensions
     /// <para>
     /// It attempts to find a <see cref="HostingContext" /> instance from the
     /// host builder properties and if not available creates one and adds it as
-    /// a singleton service and as an <see cref="IHostingContext" /> service
+    /// a singleton service and as an <see cref="BaseHostingContext" /> service
     /// for use by the <see cref="UserInterfaceHostedService" />.
     /// </para>
     /// <para>
@@ -67,10 +67,8 @@ public static class HostingExtensions
         }
 
         _ = hostBuilder.Services.AddSingleton(context);
-        _ = hostBuilder.Services.AddSingleton<IHostingContext>(
-            services => services.GetRequiredService<HostingContext>());
 
-        _ = hostBuilder.Services.AddSingleton<UserInterfaceThread>()
+        _ = hostBuilder.Services.AddSingleton<IUserInterfaceThread, UserInterfaceThread>()
             .AddHostedService<UserInterfaceHostedService>();
 
         _ = hostBuilder.Services.AddSingleton<TApplication>();

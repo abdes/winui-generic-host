@@ -12,7 +12,7 @@ using Microsoft.UI.Xaml;
 /// Encapsulates the information needed to manage the hosting of a WinUI based
 /// User Interface service and associated thread.
 /// </summary>
-public class HostingContext : BaseHostingContext
+public class HostingContext(bool lifeTimeLinked = true) : BaseHostingContext(lifeTimeLinked)
 {
     /// <summary>Gets or sets the WinUI dispatcher queue.</summary>
     /// <value>The WinUI dispatcher queue.</value>

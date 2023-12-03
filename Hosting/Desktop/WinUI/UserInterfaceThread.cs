@@ -4,6 +4,7 @@
 
 namespace HappyCoding.Hosting.Desktop.WinUI;
 
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -41,6 +42,23 @@ public class UserInterfaceThread(
     context,
     loggerFactory?.CreateLogger<UserInterfaceThread>() ?? MakeNullLogger())
 {
+    /// <inheritdoc />
+    public override Task StopUserInterfaceAsync()
+    {
+        Debug.Assert(
+            this.HostingContext.Application is not null,
+            "Expecting the `Application` in the context to not be null.");
+
+        TaskCompletionSource completion = new();
+        _ = this.HostingContext.Dispatcher!.TryEnqueue(
+            () =>
+            {
+                this.HostingContext.Application?.Exit();
+                completion.SetResult();
+            });
+        return completion.Task;
+    }
+
     /// <inheritdoc />
     protected override void BeforeStart() => ComWrappersSupport.InitializeComWrappers();
 

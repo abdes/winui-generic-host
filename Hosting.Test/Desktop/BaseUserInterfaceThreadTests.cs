@@ -24,7 +24,7 @@ public class BaseUserInterfaceThreadTests
     [Category("Lifecycle")]
     public void FromStartToFinish()
     {
-        var mockContext = new Mock<BaseHostingContext>();
+        var mockContext = new Mock<BaseHostingContext>(true);
         var mockLifeTime = new Mock<IHostApplicationLifetime>();
         var mockLogger = new Mock<ILogger>();
 
@@ -42,7 +42,7 @@ public class BaseUserInterfaceThreadTests
 
         // Start he UI thread and wait until it completes before testing for assertions.
         var thread = mockThread.Object;
-        thread.Start();
+        thread.StartUserInterface();
         thread.AwaitUiThreadCompletion();
 
         mockThread.Protected()
@@ -59,7 +59,7 @@ public class BaseUserInterfaceThreadTests
     [Category("Lifecycle")]
     public void LinkedLifetimeCompletion()
     {
-        var mockContext = new Mock<BaseHostingContext> { Object = { IsLifetimeLinked = true } };
+        var mockContext = new Mock<BaseHostingContext>(true);
 
         var mockLifeTime = new Mock<IHostApplicationLifetime>();
         var mockLogger = new Mock<ILogger>();
@@ -75,7 +75,7 @@ public class BaseUserInterfaceThreadTests
         var thread = mockThread.Object;
 
         // Start he UI thread and wait until it completes before testing for assertions.
-        thread.Start();
+        thread.StartUserInterface();
         thread.AwaitUiThreadCompletion();
 
         mockLifeTime.Verify(m => m.StopApplication());
@@ -90,7 +90,7 @@ public class BaseUserInterfaceThreadTests
     [Category("Lifecycle")]
     public void IndependentLifetimeCompletion()
     {
-        var mockContext = new Mock<BaseHostingContext> { Object = { IsLifetimeLinked = false } };
+        var mockContext = new Mock<BaseHostingContext>(false);
 
         var mockLifeTime = new Mock<IHostApplicationLifetime>();
         var mockLogger = new Mock<ILogger>();
@@ -106,7 +106,7 @@ public class BaseUserInterfaceThreadTests
         var thread = mockThread.Object;
 
         // Start he UI thread and wait until it completes before testing for assertions.
-        thread.Start();
+        thread.StartUserInterface();
         thread.AwaitUiThreadCompletion();
 
         mockLifeTime.Verify(m => m.StopApplication(), Times.Never);

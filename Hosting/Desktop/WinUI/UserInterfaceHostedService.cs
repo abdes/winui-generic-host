@@ -4,7 +4,6 @@
 
 namespace HappyCoding.Hosting.Desktop.WinUI;
 
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,12 +39,12 @@ using Microsoft.Extensions.Logging.Abstractions;
 /// </param>
 /// <param name="context">The <see cref="HostingContext" /> instance.</param>
 public partial class UserInterfaceHostedService(
-    ILoggerFactory loggerFactory,
-    UserInterfaceThread uiThread,
-    IHostingContext context) : IHostedService
+    ILoggerFactory? loggerFactory,
+    IUserInterfaceThread uiThread,
+    HostingContext context) : IHostedService
 {
-    private readonly ILogger<UserInterfaceHostedService> logger
-        = loggerFactory.CreateLogger<UserInterfaceHostedService>();
+    private readonly ILogger logger = loggerFactory?.CreateLogger<UserInterfaceHostedService>() ??
+                                      NullLoggerFactory.Instance.CreateLogger<UserInterfaceHostedService>();
 
     /// <inheritdoc />
     public Task StartAsync(CancellationToken cancellationToken)
@@ -56,30 +55,20 @@ public partial class UserInterfaceHostedService(
         }
 
         // Make the UI thread go
-        uiThread.Start();
+        uiThread.StartUserInterface();
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        if (context.IsRunning && context is HostingContext concreteContext)
+        if (cancellationToken.IsCancellationRequested || !context.IsRunning)
         {
-            Debug.Assert(
-                concreteContext.Application is not null,
-                "With `IsRunning` being true, expecting the `Application` in the context to be not null.");
-
-            this.StoppingUserInterfaceThread();
-
-            TaskCompletionSource completion = new();
-            _ = concreteContext.Dispatcher!.TryEnqueue(
-                () =>
-                {
-                    concreteContext.Application.Exit();
-                    completion.SetResult();
-                });
-            await completion.Task;
+            return Task.CompletedTask;
         }
+
+        this.StoppingUserInterfaceThread();
+        return uiThread.StopUserInterfaceAsync();
     }
 
     [LoggerMessage(

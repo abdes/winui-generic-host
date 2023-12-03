@@ -4,6 +4,7 @@
 
 namespace HappyCoding.Hosting.Desktop;
 
+using System.Diagnostics;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -12,11 +13,11 @@ using Microsoft.Extensions.Logging;
 /// application.
 /// </summary>
 /// <typeparam name="T">
-/// The concrete type of the class implementing <see cref="IHostingContext" />
+/// The concrete type of the class extending <see cref="BaseHostingContext" />
 /// which will provide the necessary options to setup the User Interface.
 /// </typeparam>
-public abstract partial class BaseUserInterfaceThread<T> : IDisposable
-    where T : class, IHostingContext
+public abstract partial class BaseUserInterfaceThread<T> : IDisposable, IUserInterfaceThread
+    where T : BaseHostingContext
 {
     private readonly IHostApplicationLifetime hostApplicationLifetime;
     private readonly ILogger logger;
@@ -78,8 +79,7 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     }
 
     /// <summary>
-    /// Gets the instance of <see cref="IHostingContext" /> for the user
-    /// interface service.
+    /// Gets the hosting context for the user interface service.
     /// </summary>
     /// <value>
     /// Although never <c>null</c>, the different fields of the hosting context
@@ -99,7 +99,10 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     /// required for the UI is initialized before we start it. The
     /// responsibility for triggering this rests with the User Interface hosted
     /// service.
-    public void Start() => this.serviceManualResetEvent.Set();
+    public void StartUserInterface() => this.serviceManualResetEvent.Set();
+
+    /// <inheritdoc />
+    public abstract Task StopUserInterfaceAsync();
 
     /// <summary>
     /// Wait until the created User Interface Thread completes its
@@ -130,9 +133,12 @@ public abstract partial class BaseUserInterfaceThread<T> : IDisposable
     /// eventually request the hosted application to stop depending on whether
     /// the UI lifecycle and the application lifecycle are linked or not.
     /// </summary>
-    /// <seealso cref="IHostingContext.IsLifetimeLinked" />
+    /// <seealso cref="BaseHostingContext.IsLifetimeLinked" />
     private void OnCompletion()
     {
+        Debug.Assert(
+            this.HostingContext.IsRunning,
+            "Expecting the `IsRunning` flag to be set when `OnCompletion() is called");
         this.HostingContext.IsRunning = false;
         if (this.HostingContext.IsLifetimeLinked)
         {

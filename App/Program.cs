@@ -33,7 +33,7 @@ using Microsoft.Extensions.Hosting;
 /// The WinUI service configuration supports customization, through a
 /// <see cref="HostingContext" /> object placed in the
 /// <see cref="IHostApplicationBuilder.Properties" /> of the host builder.
-/// Currently the <see cref="IHostingContext.IsLifetimeLinked" /> property
+/// Currently the <see cref="BaseHostingContext.IsLifetimeLinked" /> property
 /// allows to specify if the User Interface thread lifetime is linked to the
 /// application lifetime or not. When the two lifetimes are linked, terminating
 /// either of them will resulting in terminating the other.

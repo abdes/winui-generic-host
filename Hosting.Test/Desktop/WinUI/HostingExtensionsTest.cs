@@ -4,7 +4,6 @@
 
 namespace HappyCoding.Hosting.Desktop.WinUI;
 
-using HappyCoding.Hosting.Desktop;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
@@ -37,13 +36,7 @@ public class HostingExtensionsTest
         Assert.That(host, Is.Not.Null);
 
         var context = host.Services.GetRequiredService<HostingContext>();
-        var iContext = host.Services.GetRequiredService<IHostingContext>();
-        Assert.Multiple(
-            () =>
-            {
-                Assert.That(iContext, Is.EqualTo(context));
-                Assert.That(context.IsLifetimeLinked, Is.False);
-            });
+        Assert.That(context.IsLifetimeLinked, Is.False);
     }
 
     /// <summary>
@@ -60,13 +53,7 @@ public class HostingExtensionsTest
         Assert.That(host, Is.Not.Null);
 
         var context = host.Services.GetRequiredService<HostingContext>();
-        var iContext = host.Services.GetRequiredService<IHostingContext>();
-        Assert.Multiple(
-            () =>
-            {
-                Assert.That(iContext, Is.EqualTo(context));
-                Assert.That(context.IsLifetimeLinked, Is.True); // default is true
-            });
+        Assert.That(context.IsLifetimeLinked, Is.True); // default is true
     }
 
     /// <summary>
@@ -83,7 +70,7 @@ public class HostingExtensionsTest
             .Build();
         Assert.That(host, Is.Not.Null);
 
-        _ = host.Services.GetRequiredService<UserInterfaceThread>();
+        _ = host.Services.GetRequiredService<IUserInterfaceThread>();
     }
 
     /// <summary>
